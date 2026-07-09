@@ -1,0 +1,249 @@
+.admin-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+  position: relative;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.admin-header h1 {
+  font-size: 1.75rem;
+  color: var(--color-text);
+  margin-bottom: 0.25rem;
+}
+
+.admin-header p {
+  color: var(--color-text-secondary);
+}
+
+.admin-add-btn {
+  background-color: var(--color-accent);
+  color: var(--color-surface);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.admin-add-btn:hover {
+  background-color: var(--color-accent-hover);
+}
+
+.admin-table-wrapper {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.9rem;
+}
+
+.admin-table th {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  font-weight: 700;
+}
+
+.admin-table-actions {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.admin-edit-btn,
+.admin-delete-btn {
+  border: none;
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-edit-btn {
+  background-color: #eef4ff;
+  color: var(--color-accent);
+}
+
+.admin-delete-btn {
+  background-color: #fef2f2;
+  color: #ef4444;
+}
+
+.admin-empty {
+  text-align: center;
+  padding: 3rem;
+  color: var(--color-text-secondary);
+}
+
+.admin-form-wrapper {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.admin-form-wrapper h2 {
+  color: var(--color-text);
+  margin-bottom: 1.5rem;
+}
+
+.job-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.job-form-field {
+  margin-bottom: 1.25rem;
+}
+
+.job-form-field label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.4rem;
+}
+
+.job-form-field input,
+.job-form-field select,
+.job-form-field textarea {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: var(--color-text);
+}
+
+.job-form-field input:focus,
+.job-form-field select:focus,
+.job-form-field textarea:focus {
+  outline: 2px solid var(--color-accent);
+  border-color: transparent;
+}
+
+.input-error {
+  border-color: #ef4444 !important;
+}
+
+.field-error {
+  display: block;
+  color: #ef4444;
+  font-size: 0.8rem;
+  margin-top: 0.35rem;
+}
+
+.job-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.job-form-cancel {
+  background-color: var(--color-tag-bg);
+  color: var(--color-text-secondary);
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.job-form-submit {
+  background-color: var(--color-accent);
+  color: var(--color-surface);
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.admin-modal {
+  background-color: var(--color-surface);
+  border-radius: 12px;
+  padding: 1.75rem;
+  max-width: 360px;
+  width: 90%;
+  text-align: center;
+}
+
+.admin-modal h3 {
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+}
+
+.admin-modal p {
+  color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.admin-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.admin-modal-cancel {
+  background-color: var(--color-tag-bg);
+  color: var(--color-text-secondary);
+  border: none;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-modal-confirm {
+  background-color: #ef4444;
+  color: var(--color-surface);
+  border: none;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .job-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-table {
+    font-size: 0.8rem;
+  }
+}

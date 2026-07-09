@@ -1,0 +1,62 @@
+.filter-panel {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  height: fit-content;
+}
+
+.filter-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.filter-panel-header h3 {
+  font-size: 1.1rem;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.filter-clear {
+  background: none;
+  border: none;
+  color: var(--color-accent);
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.filter-clear:hover {
+  text-decoration: underline;
+}
+
+.filter-group {
+  margin-bottom: 1.25rem;
+}
+
+.filter-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.4rem;
+}
+
+.filter-group select,
+.filter-group input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: var(--color-text);
+}
+
+.filter-group select:focus,
+.filter-group input:focus {
+  outline: 2px solid var(--color-accent);
+  border-color: transparent;
+}
