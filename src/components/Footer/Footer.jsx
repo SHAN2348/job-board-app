@@ -26,7 +26,7 @@ function Footer() {
       </div>
 
       <div className="footer-bottom">
-        <p>&copy; {new Date().getFullYear()} JobBoard. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} JobBoard. Built with React & deployed via CI/CD.</p>
       </div>
     </footer>
   );
