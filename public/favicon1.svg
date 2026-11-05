@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <style>
+    .bg { fill: url(#lightGrad); }
+    .silhouette { fill: #ffffff; }
+    .accent { fill: #34d399; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: url(#darkGrad); }
+      .accent { fill: #38bdf8; }
+    }
+  </style>
+  <defs>
+    <linearGradient id="lightGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+    <linearGradient id="darkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ec4899" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+  </defs>
+  <rect width="100" height="100" rx="24" class="bg" />
+  <path class="silhouette" d="M36 34v-4c0-3.3 2.7-6 6-6h16c3.3 0 6 2.7 6 6v4h12c2.2 0 4 1.8 4 4v34c0 2.2-1.8 4-4 4H24c-2.2 0-4-1.8-4-4V38c0-2.2 1.8-4 4-4h12zm6-4v4h16v-4c0-1.1-.9-2-2-2H44c-1.1 0-2 .9-2 2zM44 48c0-1.1-.9-2-2-2H28v6h14c1.1 0 2-.9 2-2zm28 14H42c-1.1 0-2 .9-2 2s.9 2 2 2h30v-4z" />
+  <path class="accent" d="M44 64l8-8 10 10 18-18h-8v-4h14v14h-4v-8L62 62l-10-10-8 8z" />
+</svg>

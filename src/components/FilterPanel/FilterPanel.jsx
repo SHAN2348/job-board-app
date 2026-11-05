@@ -1,15 +1,34 @@
+
+import './FilterPanel.css';
+
 function FilterPanel({ filters, onFilterChange, onClearFilters }) {
+  const activeFilters = Object.values(filters).filter(Boolean).length;
+
   return (
     <aside className="filter-panel">
       <div className="filter-panel-header">
-        <h3>Filters</h3>
-        <button className="filter-clear" onClick={onClearFilters}>
-          Clear All
+        <div>
+          <span className="filter-panel-eyebrow">REFINE RESULTS</span>
+          <h3>Filters</h3>
+        </div>
+
+        <button
+          className="filter-clear"
+          onClick={onClearFilters}
+          type="button"
+        >
+          Reset
         </button>
       </div>
 
+      <div className="filter-active-count">
+        {activeFilters === 0
+          ? 'No filters applied'
+          : `${activeFilters} ${activeFilters === 1 ? 'filter' : 'filters'} applied`}
+      </div>
+
       <div className="filter-group">
-        <label htmlFor="jobType">Job Type</label>
+        <label htmlFor="jobType">Employment type</label>
         <select
           id="jobType"
           value={filters.jobType}
@@ -23,7 +42,7 @@ function FilterPanel({ filters, onFilterChange, onClearFilters }) {
       </div>
 
       <div className="filter-group">
-        <label htmlFor="experience">Experience</label>
+        <label htmlFor="experience">Experience level</label>
         <select
           id="experience"
           value={filters.experience}
@@ -40,14 +59,23 @@ function FilterPanel({ filters, onFilterChange, onClearFilters }) {
       </div>
 
       <div className="filter-group">
-        <label htmlFor="minSalary">Minimum Salary (₹)</label>
+        <label htmlFor="minSalary">Minimum salary (₹)</label>
         <input
           id="minSalary"
           type="number"
+          min="0"
           placeholder="e.g. 50000"
           value={filters.minSalary}
           onChange={(e) => onFilterChange('minSalary', e.target.value)}
         />
+        <span className="filter-input-hint">
+          Enter your minimum expected salary.
+        </span>
+      </div>
+
+      <div className="filter-panel-note">
+        <span className="filter-note-icon">✦</span>
+        <p>Use filters to discover opportunities that fit your goals.</p>
       </div>
     </aside>
   );

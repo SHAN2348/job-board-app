@@ -5,7 +5,7 @@ const ThemeContext = createContext();
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem('jobBoardTheme');
-    return savedTheme || 'light';
+    return savedTheme || 'dark';
   });
 
   useEffect(() => {

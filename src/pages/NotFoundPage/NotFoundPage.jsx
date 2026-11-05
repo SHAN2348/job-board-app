@@ -1,26 +1,53 @@
+
 import { Link } from 'react-router-dom';
+import './NotFoundPage.css';
 
 function NotFoundPage() {
   return (
-    <div style={{ padding: '5rem 1.5rem', textAlign: 'center', minHeight: '60vh' }}>
-      <h1 style={{ fontSize: '4rem', margin: 0 }}>404</h1>
-      <p style={{ fontSize: '1.2rem', color: '#6b7280', marginBottom: '1.5rem' }}>
-        Oops! The page you're looking for doesn't exist.
-      </p>
-      <Link
-        to="/"
-        style={{
-          background: '#4f9dfa',
-          color: '#fff',
-          padding: '0.7rem 1.5rem',
-          borderRadius: '8px',
-          textDecoration: 'none',
-          fontWeight: 600,
-        }}
-      >
-        Back to Home
-      </Link>
-    </div>
+    <main className="not-found-page">
+      <div className="not-found-glow" />
+
+      <section className="not-found-content">
+        <div className="not-found-illustration">
+          <span className="not-found-code">404</span>
+          <span className="not-found-orbit orbit-one" />
+          <span className="not-found-orbit orbit-two" />
+          <span className="not-found-center-dot" />
+        </div>
+
+        <span className="not-found-eyebrow">
+          PAGE NOT FOUND
+        </span>
+
+        <h1>
+          Looks like you're
+          <span> off the map.</span>
+        </h1>
+
+        <p>
+          The page you're looking for may have been moved,
+          removed, or never existed. Let's get you back on track.
+        </p>
+
+        <div className="not-found-actions">
+          <Link to="/" className="not-found-home-btn">
+            <span aria-hidden="true">←</span>
+            Back to Home
+          </Link>
+
+          <Link to="/jobs" className="not-found-jobs-btn">
+            Explore Jobs
+            <span aria-hidden="true">↗</span>
+          </Link>
+        </div>
+
+        <div className="not-found-footer">
+          <span>JOB BOARD</span>
+          <span className="not-found-footer-dot" />
+          <span>Error code 404</span>
+        </div>
+      </section>
+    </main>
   );
 }
 

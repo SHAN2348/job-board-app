@@ -12,10 +12,42 @@ const emptyJob = {
   category: '',
   description: '',
   skills: '',
+  responsibilities: '',
+  benefits: '',
+  companyAbout: '',
+  companyWebsite: '',
 };
 
 function JobForm({ initialData, onSubmit, onCancel }) {
-  const [formData, setFormData] = useState(initialData || emptyJob);
+ const [formData, setFormData] = useState(() => {
+  if (!initialData) {
+    return emptyJob;
+  }
+
+  return {
+    title: initialData.title || '',
+    company: initialData.company || '',
+    companyLogo: initialData.companyLogo || '',
+    location: initialData.location || '',
+    type: initialData.type || 'Full-time',
+    experience: initialData.experience || '',
+    salaryMin: initialData.salary?.min ?? '',
+    salaryMax: initialData.salary?.max ?? '',
+    category: initialData.category || '',
+    description: initialData.description || '',
+    skills: Array.isArray(initialData.skills)
+      ? initialData.skills.join(', ')
+      : '',
+    responsibilities: Array.isArray(initialData.responsibilities)
+      ? initialData.responsibilities.join('\n')
+      : '',
+    benefits: Array.isArray(initialData.benefits)
+      ? initialData.benefits.join('\n')
+      : '',
+    companyAbout: initialData.companyInfo?.about || '',
+    companyWebsite: initialData.companyInfo?.website || '',
+  };
+});
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
@@ -72,7 +104,7 @@ function JobForm({ initialData, onSubmit, onCancel }) {
       company: formData.company.trim(),
       companyLogo:
         formData.companyLogo.trim() ||
-        `https://api.dicebear.com/7.x/initials/svg?seed=${formData.company}`,
+        `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(formData.company.trim())}`,
       location: formData.location.trim(),
       type: formData.type,
       experience: formData.experience.trim(),
@@ -86,9 +118,20 @@ function JobForm({ initialData, onSubmit, onCancel }) {
       },
       postedDate: initialData?.postedDate || new Date().toISOString().split('T')[0],
       featured: initialData?.featured || false,
-      responsibilities: initialData?.responsibilities || [],
-      benefits: initialData?.benefits || [],
-      companyInfo: initialData?.companyInfo || { about: '', website: '' },
+      responsibilities: formData.responsibilities
+  .split('\n')
+  .map((item) => item.trim())
+  .filter((item) => item.length > 0),
+
+benefits: formData.benefits
+  .split('\n')
+  .map((item) => item.trim())
+  .filter((item) => item.length > 0),
+
+companyInfo: {
+  about: formData.companyAbout.trim(),
+  website: formData.companyWebsite.trim(),
+},
     };
 
     onSubmit(jobPayload);
@@ -231,6 +274,64 @@ function JobForm({ initialData, onSubmit, onCancel }) {
         {errors.description && <span className="field-error">{errors.description}</span>}
       </div>
 
+      {/* Job Responsibilities */}
+<div className="job-form-field">
+  <label htmlFor="responsibilities">
+    Job Responsibilities
+  </label>
+  <textarea
+    id="responsibilities"
+    name="responsibilities"
+    rows="5"
+    placeholder={'Enter each responsibility on a new line:\nDevelop REST APIs\nMaintain backend services\nFix bugs and improve performance'}
+    value={formData.responsibilities}
+    onChange={handleChange}
+  />
+</div>
+
+{/* Employee Benefits */}
+<div className="job-form-field">
+  <label htmlFor="benefits">
+    Employee Benefits
+  </label>
+  <textarea
+    id="benefits"
+    name="benefits"
+    rows="4"
+    placeholder={'Enter each benefit on a new line:\nHealth insurance\nPaid leaves\nWork from home'}
+    value={formData.benefits}
+    onChange={handleChange}
+  />
+</div>
+
+{/* Company Information */}
+<div className="job-form-field">
+  <label htmlFor="companyAbout">
+    About Company
+  </label>
+  <textarea
+    id="companyAbout"
+    name="companyAbout"
+    rows="4"
+    placeholder="Write a short description about the company"
+    value={formData.companyAbout}
+    onChange={handleChange}
+  />
+</div>
+
+<div className="job-form-field">
+  <label htmlFor="companyWebsite">
+    Company Website
+  </label>
+  <input
+    id="companyWebsite"
+    name="companyWebsite"
+    type="url"
+    placeholder="https://example.com"
+    value={formData.companyWebsite}
+    onChange={handleChange}
+  />
+</div>
       <div className="job-form-actions">
         <button type="button" className="job-form-cancel" onClick={onCancel}>
           Cancel
