@@ -1,403 +1,1124 @@
-# 🧑‍💼 JobBoard — Full-Stack Job Listing Platform
+# Job Board Application
 
-![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)
-![Python](https://img.shields.io/badge/Python-3.x-3776AB?logo=python&logoColor=white)
-![Django](https://img.shields.io/badge/Django-REST_Framework-092E20?logo=django&logoColor=white)
-![MySQL](https://img.shields.io/badge/Database-MySQL-4479A1?logo=mysql&logoColor=white)
-![Deploy](https://img.shields.io/badge/Frontend-Vercel-black?logo=vercel)
-![Deploy](https://img.shields.io/badge/Backend-Render-46E3B7?logo=render)
+A responsive job listing platform built with **React** and progressively
+developed into a full-stack application using **Django REST Framework**
+and **MySQL**. The application brings together job discovery, job
+management, user roles, authentication, and application review in one
+place.
 
-A responsive, full-stack job board application built with **React 19 and Vite** on the frontend and **Python, Django, and Django REST Framework** on the backend. It supports job discovery, job-seeker registration and authentication, and job applications, with MySQL persistence and separate cloud deployments.
+-   **Live frontend (original deployment):**
+    https://job-board-app-lake-seven.vercel.app/
+-   **Live frontend:** https://job-board-app-lake-seven.vercel.app/
+-   **Live backend:** https://job-board-backend-thf9.onrender.com/
+-   **Django Admin:** https://job-board-backend-thf9.onrender.com/admin/
+-   **GitHub repository:** https://github.com/SHAN2348/job-board-app
 
-**[🌐 Live Application](https://job-board-app-lake-seven.vercel.app/)** · **[⚙️ Backend API](https://job-board-backend-thf9.onrender.com/)** · **[🛠️ Django Admin](https://job-board-backend-thf9.onrender.com/admin/)** · **[📂 GitHub Repository](https://github.com/SHAN2348/job-board-app)**
+> **Project status:** The React frontend is hosted on Vercel, the Django
+> REST API is hosted on Render, and the production relational database
+> is hosted on Aiven MySQL. Deployment configuration and environment
+> secrets are managed separately from the source code.
 
----
+------------------------------------------------------------------------
 
-## 📌 Project Overview
+## Table of contents
 
-JobBoard began as a React job-listing project with browser-based data persistence and a GitHub Actions deployment workflow. It was then extended with a Django REST backend and a MySQL production database.
+1.  [Project overview](#project-overview)
+2.  [Features](#features)
+3.  [Screenshots](#screenshots)
+4.  [Technology stack](#technology-stack)
+5.  [Architecture and request flow](#architecture-and-request-flow)
+6.  [How the technologies are used](#how-the-technologies-are-used)
+7.  [Development journey](#development-journey)
+8.  [Authentication and roles](#authentication-and-roles)
+9.  [Database](#database)
+10. [API integration](#api-integration)
+11. [Run the project locally](#run-the-project-locally)
+12. [Testing and verification](#testing-and-verification)
+13. [Git, GitHub, CI/CD and deployment](#git-github-cicd-and-deployment)
+14. [Troubleshooting notes](#troubleshooting-notes)
+15. [Current status and next steps](#current-status-and-next-steps)
+16. [Learning outcomes](#learning-outcomes)
+17. [License](#license)
 
-The current architecture separates the frontend, backend API, and database:
+------------------------------------------------------------------------
 
-- React provides the user interface and client-side navigation.
-- Django REST Framework exposes API endpoints and validates requests.
-- MySQL stores persistent application data.
-- Vercel hosts the frontend, Render hosts the backend, and Aiven provides the production MySQL database.
+## Project overview
 
-## ✨ Features
+The Job Board Application helps users discover job opportunities and
+provides an administrative/recruiter workflow for managing job listings
+and reviewing applications.
 
-### Job seeker experience
+The project began as a frontend-focused React application. Job
+information was initially supplied by local JSON data and browser
+`localStorage`. As the project grew, that approach was replaced for the
+main job data with a Python backend:
 
-- Browse job listings.
-- Search jobs with case-insensitive matching.
-- Filter and explore job listings using the frontend's available filters.
-- View job details.
-- Register a job-seeker account.
-- Log in through the backend authentication API.
-- Submit job applications through the backend API.
-- Responsive interface and theme support carried forward from the frontend implementation.
+-   React is responsible for the user interface, navigation, forms, and
+    client-side interaction.
+-   Django REST Framework exposes HTTP API endpoints and handles
+    server-side application logic.
+-   MySQL stores persistent application data.
+-   JWT-based authentication identifies signed-in users.
+-   Role-based permissions separate recruiter operations from job-seeker
+    operations.
 
-### Administration and backend
+This progression demonstrates the move from a client-side prototype to a
+frontend-and-backend application.
 
-- Django Admin for authorized administrative management.
-- Django REST Framework API.
-- User registration with serializer validation.
-- Token authentication endpoints.
-- MySQL database integration.
-- Django ORM and migrations.
+## Features
 
-> Public registration is currently restricted to the `job_seeker` role. Recruiter self-registration should not be assumed to be available.
+### Job discovery
 
-### Engineering
+-   Browse available job listings.
+-   Search jobs using the available search interface.
+-   Filter job listings using the available filter controls.
+-   Open a job to view its details.
+-   Display job information such as company details, responsibilities,
+    and benefits where supplied.
 
-- Git and GitHub source control.
-- GitHub Actions workflow for frontend quality/build/deployment steps.
-- Vercel frontend deployment.
-- Render backend deployment.
-- Environment-based API configuration.
-- Backend automated tests.
+### Job management
 
-## 🛠️ Technology Stack
+-   Retrieve job listings from the Django API.
+-   Create job listings through the admin/recruiter interface.
+-   Update existing job listings.
+-   Delete job listings.
+-   Send create, update, and delete requests through the shared frontend
+    API request helper.
 
-| Layer | Technology | Purpose |
-|---|---|---|
-| Frontend | React 19 | UI components and application state |
-| Build tool | Vite 6 | Development server and production build |
-| Routing | React Router v7 | Client-side routing |
-| Styling | CSS3 | Responsive layout and theming |
-| Frontend linting | ESLint | Code-quality checks |
-| Backend language | Python | Server-side application logic |
-| Backend framework | Django | Web framework, ORM, admin and configuration |
-| API | Django REST Framework | REST endpoints and serializers |
-| Authentication | JWT endpoints | Token-based API authentication |
-| Database | MySQL | Relational data storage |
-| Production database | Aiven for MySQL | Managed cloud database |
-| Frontend hosting | Vercel | React deployment |
-| Backend hosting | Render | Django deployment |
-| CI/CD | GitHub Actions | Automated workflow |
-| Version control | Git and GitHub | Source control |
+Write operations are protected by backend authentication and role
+permissions.
 
-Check `package.json` and `backend/requirements.txt` for the exact dependency versions installed in the current repository.
+### Accounts and access control
 
-## 🏗️ Architecture
+-   User registration and login.
+-   JWT-based authentication.
+-   Recruiter and job-seeker roles.
+-   Public registration is intended for job seekers.
+-   Recruiter accounts are managed through Django Admin rather than
+    unrestricted public recruiter registration.
+-   Protected operations require an authenticated user with the
+    appropriate permissions.
 
-```mermaid
-flowchart LR
-    U[User Browser] --> FE[React + Vite Frontend]
-    FE -->|HTTPS REST requests| API[Django REST Framework]
-    API --> SER[Serializers and Views]
-    SER --> ORM[Django ORM]
-    ORM --> DB[(Aiven MySQL)]
-    ADMIN[Administrator] --> DJ[Django Admin]
-    DJ --> ORM
-    FE -. deployed on .-> V[Vercel]
-    API -. deployed on .-> R[Render]
+### Application management
+
+-   View submitted job applications in the management interface.
+-   Review application information.
+-   Work with application statuses such as Pending, Reviewed,
+    Shortlisted, and Rejected.
+
+The application-management interface has been developed and exercised
+with application records. The full application API workflow and all
+status transitions should be treated as ongoing verification until each
+has been tested end to end.
+
+### Frontend experience
+
+The original frontend also includes:
+
+-   Responsive layouts.
+-   Job search and filtering.
+-   Featured jobs and category-based browsing.
+-   Job detail pages.
+-   Admin job-management screens.
+-   Dark mode.
+-   Toast messages and empty/loading states.
+-   Client-side navigation using React Router.
+
+------------------------------------------------------------------------
+
+## Screenshots
+
+The screenshots below show the main user-facing workflows. Add your
+actual application screenshots to the existing `screenshots/` folder
+using the filenames shown here. If your filenames differ, update the
+image paths accordingly.
+
+| Home page | Job listings and search |
+|---|---|
+| ![Job Board home page](./screenshots/home.png) | ![Job listings and search](./screenshots/jobs.png) |
+
+| Job details | Login |
+|---|---|
+| ![Job details page](./screenshots/job-details.png) | ![Login page](./screenshots/login.png) |
+
+| Registration | My applications |
+|---|---|
+| ![Registration page](./screenshots/register.png) | ![My applications page](./screenshots/my-applications.png) |
+
+| Admin job management | Django Admin |
+|---|---|
+| ![Admin job management](./screenshots/admin-jobs.png) | ![Django Admin](./screenshots/django-admin.png) |
+
+> **Adding screenshots:** Save each image in the `screenshots/` folder
+> with the matching filename. Remove any row for a screen that is not
+> implemented or not ready to show publicly. Do not include screenshots
+> containing passwords, access tokens, personal data, or secret settings.
+
+------------------------------------------------------------------------
+
+## Technology stack
+
+  -----------------------------------------------------------------------
+  Layer                   Technology              Purpose
+  ----------------------- ----------------------- -----------------------
+  Frontend                React 19                Builds reusable UI
+                                                  components and pages
+
+  Frontend tooling        Vite                    Development server and
+                                                  production build
+
+  Language                JavaScript              Frontend application
+                                                  logic
+
+  Routing                 React Router v7         Navigation between
+                                                  application pages
+
+  Styling                 CSS3                    Layout, responsive
+                                                  styling, and theme
+                                                  styles
+
+  Backend language        Python                  Server-side application
+                                                  logic
+
+  Backend framework       Django 5.2.18           Backend project,
+                                                  models, and application
+                                                  structure
+
+  API framework           Django REST Framework   REST API endpoints,
+                                                  serialization, and API
+                                                  responses
+
+  Database                MySQL 8.0.46            Persistent relational
+                                                  data storage
+
+  Authentication          JSON Web Tokens (JWT)   Authenticated API
+                                                  access
+
+  Frontend API            Shared `apiRequest`     Sends requests from
+  integration             helper                  React to the backend
+
+  Code quality            ESLint                  Frontend code linting
+
+  Version control         Git                     Tracks source-code
+                                                  changes
+
+  Repository hosting      GitHub                  Stores code and
+                                                  workflow configuration
+
+  CI/CD                   GitHub Actions          Automates frontend
+                                                  checks and deployment
+                                                  workflow
+
+  Frontend hosting        Vercel                  Hosts the original
+                                                  frontend deployment
+  -----------------------------------------------------------------------
+
+### Why this stack?
+
+**React + Vite:** React makes it possible to divide the interface into
+reusable components. Vite provides a fast local development environment
+and creates an optimized production build.
+
+**Django + Django REST Framework:** Django provides the backend
+structure, while DRF makes it possible to expose application
+functionality through REST APIs. This keeps backend business logic
+separate from the frontend.
+
+**MySQL:** A relational database is suitable for structured data such as
+users, job listings, and applications, including relationships between
+these records.
+
+**JWT:** Tokens allow the frontend to authenticate API requests without
+relying on a traditional server-rendered page session for every request.
+
+------------------------------------------------------------------------
+
+## Architecture and request flow
+
+The application uses a frontend/backend architecture.
+
+``` text
+                  USER / BROWSER
+                        |
+                        v
+              REACT 19 + VITE
+                        |
+              React Router v7
+                        |
+               React Pages and
+                Components
+                        |
+                        v
+              API REQUEST HELPER
+                  apiRequest
+                        |
+                 HTTP / REST
+                        |
+                        v
+             DJANGO REST FRAMEWORK
+                        |
+              Authentication and
+                Permissions
+                        |
+                        v
+                 DJANGO LOGIC
+                        |
+                        v
+                    MySQL
+                        |
+                 API Response
+                        |
+                        v
+               React updates UI
 ```
 
-### Typical API request flow
+### Example: loading job listings
 
-1. A user performs an action in the React application.
-2. React sends an HTTP request to the configured backend API.
-3. Django routes the request to the relevant view.
-4. DRF serializers validate request data and serialize responses.
-5. Django ORM reads or writes the relevant MySQL records.
-6. Django returns an HTTP response, generally JSON for API requests.
-7. React updates the page based on the response.
+1.  A user opens the job listings page.
+2.  React renders the page and initiates a request.
+3.  The frontend API helper sends an HTTP `GET` request to `/api/jobs/`.
+4.  Django REST Framework receives the request.
+5.  The backend retrieves job records from MySQL.
+6.  DRF serializes the records into JSON.
+7.  Django returns an HTTP response.
+8.  React uses the returned data to display job cards.
 
-## 📁 Repository Structure
+A successful local API check returned **6 job records** from
+`GET /api/jobs/`.
 
-The following is a high-level structure. Refer to the actual repository for the latest files and exact names.
+### Example: creating a job
 
-```text
-job-board-app/
-├── .github/
-│   └── workflows/
-│       └── ci.yml
-├── public/
-├── screenshots/
-├── src/
-│   ├── assets/
-│   ├── components/
-│   ├── context/
-│   ├── data/
-│   ├── pages/
-│   │   ├── HomePage/
-│   │   ├── JobListingPage/
-│   │   ├── JobDetailsPage/
-│   │   ├── AdminPage/          # Frontend page, if retained
-│   │   ├── LoginPage/
-│   │   └── RegisterPage/
-│   ├── utils/
-│   │   └── api.js
-│   ├── App.jsx
-│   └── main.jsx
-├── backend/
-│   ├── config/                 # Django project configuration
-│   ├── jobs/                   # Job-board app, API and models
-│   ├── manage.py
-│   └── requirements.txt
-├── package.json
-└── README.md
+1.  An authorized recruiter/admin opens the job form.
+2.  The user enters the job information.
+3.  React validates and submits the form.
+4.  The API helper sends a `POST` request.
+5.  Django checks authentication, permissions, and submitted data.
+6.  The backend saves the new record to MySQL.
+7.  The API returns a response.
+8.  React updates the interface based on the result.
+
+The same general flow is used for updating and deleting job listings
+with `PUT` and `DELETE` requests.
+
+------------------------------------------------------------------------
+
+## How the technologies are used
+
+### 1. React 19
+
+React is used to build the user interface as reusable components rather
+than placing the entire application in one large file.
+
+The project separates reusable UI elements from route-level pages and
+shared application logic.
+
+React state is used for interactive interface behavior, such as search,
+filters, form values, and displayed data.
+
+### 2. Vite
+
+Vite is used to:
+
+-   Create and run the React development environment.
+-   Serve the application locally.
+-   Resolve frontend dependencies.
+-   Build optimized production assets.
+
+Commands:
+
+``` bash
+npm install
+npm run dev
+npm run build
 ```
 
-## 🚀 Getting Started
+The production build is generated in the `dist/` directory.
+
+### 3. React Router v7
+
+React Router manages navigation between pages without requiring a
+complete browser reload for every route change.
+
+It is used for the application's page navigation, including the home
+page, job listings, job details, and administration screens.
+
+### 4. JavaScript
+
+JavaScript handles frontend behavior, including:
+
+-   Event handling.
+-   Form input and validation.
+-   State updates.
+-   API request handling.
+-   Search and filtering interactions.
+-   Displaying API results and error messages.
+
+### 5. Python
+
+Python is used for backend development. It handles server-side
+operations and works with Django and Django REST Framework.
+
+### 6. Django 5.2.18
+
+Django provides the backend foundation.
+
+It is used for:
+
+-   Project configuration.
+-   Application organization.
+-   Database models and ORM operations.
+-   User management.
+-   Authentication integration.
+-   Django Admin.
+-   URL configuration.
+-   Database migrations.
+
+### 7. Django REST Framework
+
+DRF exposes backend functionality as REST APIs.
+
+It is used for:
+
+-   Receiving HTTP requests.
+-   Validating incoming data through serializers.
+-   Returning JSON responses.
+-   Handling job-related API operations.
+-   Applying authentication and permission rules.
+-   Connecting the React frontend to backend data.
+
+### 8. MySQL 8.0.46
+
+MySQL stores the application's persistent data.
+
+Django communicates with MySQL through its database configuration and
+ORM. This avoids writing raw SQL for every normal model operation.
+
+The backend's job-listing API was checked locally and returned six
+records.
+
+### 9. JWT authentication
+
+JWT is used to authenticate API requests.
+
+The frontend includes authentication information when calling protected
+backend operations. Django REST Framework verifies the token and applies
+the configured permission rules.
+
+The project also includes registration security validation. Automatic
+JWT refresh was still being verified at the time of this documentation.
+
+### 10. ESLint
+
+ESLint is used to identify frontend code-quality problems and enforce
+the project's configured lint rules.
+
+Run:
+
+``` bash
+npm run lint
+```
+
+### 11. Git and GitHub
+
+Git tracks changes during development. GitHub hosts the source code and
+stores the GitHub Actions workflow.
+
+Typical workflow:
+
+``` bash
+git status
+git add .
+git commit -m "Describe the changes"
+git push origin main
+```
+
+### 12. GitHub Actions and Vercel
+
+The original frontend project uses GitHub Actions to automate the
+frontend quality-check and deployment workflow.
+
+The workflow is configured to:
+
+1.  Run ESLint.
+2.  Create a production build.
+3.  Deploy to Vercel when the required checks pass.
+
+The workflow file is located under:
+
+``` text
+.github/
+└── workflows/
+    └── ci.yml
+```
+
+The React frontend is deployed on Vercel and the Django REST backend is
+deployed separately on Render. The backend connects to Aiven MySQL for
+production data storage.
+
+------------------------------------------------------------------------
+
+## Development journey
+
+The project was developed in stages.
+
+### Stage 1 --- Initial frontend setup
+
+-   Created the React application using Vite.
+-   Installed the frontend dependencies.
+-   Organized the application into components and pages.
+-   Configured React Router for page navigation.
+-   Started the development server and checked the application in a
+    browser.
+
+### Stage 2 --- Job board interface
+
+-   Developed the job listing interface.
+-   Created reusable job cards and other UI components.
+-   Added job details pages.
+-   Implemented search and filtering interactions.
+-   Added the administration interface for job management.
+-   Worked on responsive design and dark mode.
+
+### Stage 3 --- Initial data handling
+
+The first version used JSON job data and browser `localStorage`.
+
+This made it possible to demonstrate job listing and management behavior
+without a backend.
+
+However, browser storage is specific to a user's browser and is not a
+replacement for shared, centralized application data.
+
+### Stage 4 --- Backend development
+
+The application was extended with Django 5.2.18 and Django REST
+Framework.
+
+Backend responsibilities were separated from frontend responsibilities.
+
+The backend is deployed on Render and uses the Aiven MySQL production database. The backend handles:
+
+-   Job listing data.
+-   Job creation, retrieval, updating, and deletion.
+-   User authentication.
+-   Recruiter and job-seeker roles.
+-   Application-management functionality.
+
+### Stage 5 --- MySQL integration
+
+-   Installed and configured MySQL Server.
+-   Connected the Django project to MySQL.
+-   Used Django's ORM for database operations.
+-   Created and applied database migrations.
+-   Checked the jobs API to verify that database records could be
+    retrieved.
+
+### Stage 6 --- Authentication and registration security
+
+-   Integrated JWT authentication.
+-   Added role-aware access control.
+-   Worked on restricting public registration to job seekers.
+-   Kept recruiter account management under Django Admin.
+-   Checked registration security validation.
+
+### Stage 7 --- React and Django integration
+
+-   Connected the React application to the Django API.
+-   Replaced the earlier frontend-only job data service with backend API
+    integration.
+-   Removed the old `jobsService.js` data-service approach.
+-   Used a shared `apiRequest` helper for API communication.
+-   Connected admin job creation, updating, and deletion operations to
+    the backend.
+
+### Stage 8 --- Verification and build
+
+-   Checked the jobs API response.
+-   Ran registration security tests.
+-   Built the React application.
+-   Continued checking the authentication and application-management
+    workflow.
+
+------------------------------------------------------------------------
+
+## Authentication and roles
+
+The application distinguishes between two user roles.
+
+  -----------------------------------------------------------------------
+  Role                                Main responsibility
+  ----------------------------------- -----------------------------------
+  Job Seeker                          Discover job opportunities and use
+                                      job-seeker functionality
+
+  Recruiter                           Manage job listings and review
+                                      applications
+  -----------------------------------------------------------------------
+
+### Job seeker
+
+A job seeker uses the public registration flow and can sign in to access
+the functionality allowed by the backend.
+
+### Recruiter
+
+Recruiter accounts are managed through Django Admin rather than being
+created through unrestricted public registration.
+
+Recruiter permissions are intended to protect job-management operations
+from unauthorized users.
+
+### JWT request flow
+
+``` text
+User submits login form
+          |
+          v
+React sends login request
+          |
+          v
+Django validates credentials
+          |
+          v
+JWT token response
+          |
+          v
+Frontend handles authentication
+          |
+          v
+Protected API request
+          |
+          v
+Django verifies token
+          |
+          v
+Permission check
+          |
+          v
+API response
+```
+
+Authentication and authorization are different:
+
+-   **Authentication:** verifies who the user is.
+-   **Authorization:** determines what the authenticated user is allowed
+    to do.
+
+------------------------------------------------------------------------
+
+## Database
+
+MySQL 8.0.46 is used as the relational database for the backend.
+
+Django models represent application data, and Django's ORM handles
+normal database operations.
+
+The main data areas include:
+
+-   User and role information.
+-   Job listings.
+-   Job application information.
+
+Conceptually, a job application connects a job seeker to a job listing.
+The exact database fields and relationship definitions are maintained in
+the Django models.
+
+### Database setup
+
+After configuring the MySQL connection in Django:
+
+``` bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+To inspect the configured database and available models, use Django's
+management commands and Django Admin.
+
+> Keep database passwords and other credentials out of Git. Use local
+> configuration or environment-based secrets, and provide example
+> placeholders rather than real credentials in shared documentation.
+
+------------------------------------------------------------------------
+
+## API integration
+
+The frontend communicates with Django through HTTP requests.
+
+One locally verified endpoint is:
+
+  -----------------------------------------------------------------------
+  Method            Endpoint          Purpose           Verification
+  ----------------- ----------------- ----------------- -----------------
+  GET               `/api/jobs/`      Retrieve job      Returned 6
+                                      listings          records locally
+
+  -----------------------------------------------------------------------
+
+The job-management interface is connected to create, update, and delete
+operations through the shared `apiRequest` helper.
+
+The exact route names for registration, login, token refresh, individual
+job operations, and applications should be taken from the current Django
+URL configuration rather than guessed in documentation.
+
+### HTTP methods used
+
+  Method   Typical purpose
+  -------- ----------------------------------
+  GET      Retrieve data
+  POST     Create a resource or submit data
+  PUT      Replace/update a resource
+  PATCH    Partially update a resource
+  DELETE   Remove a resource
+
+### Why use a shared API helper?
+
+A shared request helper avoids duplicating request logic across every
+component.
+
+It provides a central place to handle common request configuration,
+authentication headers, and response/error handling.
+
+------------------------------------------------------------------------
+
+## Run the project locally
+
+The commands below describe the normal local setup. Run backend and
+frontend in separate terminals.
 
 ### Prerequisites
 
-- Git
-- Node.js and npm
-- Python
-- MySQL for local development, or access to a compatible MySQL instance
-- Visual Studio Code or another code editor
+Install:
+
+-   Python version compatible with the project's installed Django version.
+-   pip.
+-   Node.js and npm.
+-   MySQL Server 8.0 or a compatible version.
+-   Git.
+-   A code editor such as Visual Studio Code.
 
 ### 1. Clone the repository
 
-```bash
+``` bash
 git clone https://github.com/SHAN2348/job-board-app.git
 cd job-board-app
 ```
 
-### 2. Set up the backend
+The repository contains the frontend and backend project files. Run the
+frontend and backend from their respective directories as described
+below.
 
-```bash
-cd backend
-python -m venv venv
-```
+### 2. Frontend setup
 
-Activate the virtual environment.
+Open a terminal in the React project directory:
 
-**Windows PowerShell**
-```powershell
-.\venv\Scripts\Activate.ps1
-```
-
-**macOS / Linux**
-```bash
-source venv/bin/activate
-```
-
-Install backend dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-Create a private backend `.env` file with the variable names expected by `backend/config/settings.py`. For local development, use a local development database rather than production credentials.
-
-Run database migrations and start Django:
-
-```bash
-python manage.py migrate
-python manage.py runserver
-```
-
-The local backend normally runs at `http://127.0.0.1:8000/`.
-
-### 3. Set up the frontend
-
-Open a second terminal at the repository root:
-
-```bash
+``` bash
 npm install
-```
-
-Create `.env.local`:
-
-```env
-VITE_API_BASE_URL=http://127.0.0.1:8000
-```
-
-Start the frontend:
-
-```bash
 npm run dev
 ```
 
-Vite prints the local frontend URL in the terminal (commonly `http://localhost:5173`).
+Open the local URL printed by Vite, normally:
 
-### 4. Frontend quality checks
+``` text
+http://localhost:5173
+```
 
-```bash
-npm run lint
+Build the frontend:
+
+``` bash
 npm run build
 ```
 
-The production build is generated in `dist/`.
+Run lint checks:
 
-## 🔐 Environment Variables
-
-### Frontend
-
-| Variable | Description | Local example |
-|---|---|---|
-| `VITE_API_BASE_URL` | Backend API origin | `http://127.0.0.1:8000` |
-
-Production frontend configuration uses:
-
-```env
-VITE_API_BASE_URL=https://job-board-backend-thf9.onrender.com
+``` bash
+npm run lint
 ```
 
-Set this value in Vercel's project environment settings for the relevant deployment environment.
+### 3. Backend setup
 
-**Do not put secrets in `VITE_` variables.** Vite variables are included in browser-side code.
+Open a separate terminal in the directory containing Django's
+`manage.py`:
 
-### Backend
-
-The backend uses database configuration variables including:
-
-| Variable | Purpose |
-|---|---|
-| `DB_NAME` | Database name |
-| `DB_USER` | Database username |
-| `DB_PASSWORD` | Database password |
-| `DB_HOST` | Database hostname |
-| `DB_PORT` | Database port |
-
-Check `backend/config/settings.py` for the complete list of required settings, including Django secret key, debug mode, allowed hosts, CORS configuration, and database SSL options.
-
-Never commit `.env` files, passwords, secret keys, access tokens, or database connection strings.
-
-## 🔌 API Overview
-
-Production API base URL:
-
-```text
-https://job-board-backend-thf9.onrender.com
+``` bash
+python -m venv venv
 ```
 
-| Method | Endpoint | Purpose |
-|---|---|---|
-| `GET` | `/api/jobs/` | Retrieve job listings |
-| `POST` | `/api/register/` | Register a job-seeker account |
-| `POST` | `/api/token/` | Obtain authentication tokens |
-| `POST` | `/api/token/refresh/` | Refresh an access token |
-| `GET` | `/api/me/` | Retrieve the authenticated user's information |
-| Configured methods | `/api/applications/` | Job application resource |
+On Windows PowerShell:
 
-The exact request fields, response bodies, supported methods, and permissions should be checked in the current backend URL configuration, views, serializers, and tests.
+``` powershell
+.\venv\Scripts\Activate.ps1
+```
 
-### Registration notes
+On Windows Command Prompt:
 
-The registration serializer accepts the registration information used by the frontend and creates users through Django's `create_user()` method. Django hashes the password before storing it. Public registration is restricted to the `job_seeker` role, and the serializer enforces a minimum password length.
+``` bat
+venv\Scripts\activate
+```
 
-## 🧪 Testing
+Install the backend dependencies from the project's dependency file, if
+provided:
 
-### Backend tests
+``` bash
+pip install -r requirements.txt
+```
 
-Run from the `backend` directory:
+Configure the Django database settings to connect to your local MySQL
+server. Do not commit passwords or secret keys.
 
-```bash
+Apply migrations:
+
+``` bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+Create an administrator account:
+
+``` bash
+python manage.py createsuperuser
+```
+
+Start the backend:
+
+``` bash
+python manage.py runserver
+```
+
+The default Django development address is:
+
+``` text
+http://127.0.0.1:8000/
+```
+
+Django Admin is normally available at:
+
+``` text
+http://127.0.0.1:8000/admin/
+```
+
+### 4. Connect frontend and backend
+
+Make sure the frontend's API configuration points to the local Django
+backend and that Django's CORS configuration permits the frontend's
+development origin.
+
+Set `VITE_API_BASE_URL` in the frontend environment configuration to
+`http://127.0.0.1:8000` for local development. Use the deployed Render
+API base URL in the Vercel environment configuration for production.
+
+### 5. Run the full application
+
+1.  Start MySQL Server.
+2.  Start Django in the backend terminal.
+3.  Start Vite in the frontend terminal.
+4.  Open the frontend in your browser.
+5.  Verify that the frontend can retrieve data from Django.
+
+------------------------------------------------------------------------
+
+## Testing and verification
+
+Testing was performed progressively while the application was being
+developed.
+
+### 1. Frontend development check
+
+**Tool:** Vite development server and browser.
+
+The application was opened locally to inspect page rendering,
+navigation, job listing behavior, and frontend interactions.
+
+### 2. API retrieval check
+
+**Tool:** Local Django API/browser or API client.
+
+Request:
+
+``` http
+GET /api/jobs/
+```
+
+Observed result:
+
+-   The endpoint responded with job data.
+-   Six job records were returned.
+
+This confirmed that the local React/backend development work had a
+working job-list retrieval endpoint and that the backend could retrieve
+records from its configured database.
+
+### 3. Backend automated tests
+
+**Tool:** Django test runner.
+
+Command:
+
+``` bash
 python manage.py test jobs
 ```
 
-**Recorded development result:** 41 tests passed (`OK`).
+Recorded result: **41 tests passed**. This confirms the test cases in the
+`jobs` app passed at the time they were run; it is not a claim of complete
+coverage of every possible production scenario.
 
-Re-run the test suite against the current code before making a new release.
+### 4. Frontend production build
 
-### Frontend checks
+**Tool:** npm and Vite.
 
-```bash
-npm run lint
+Command:
+
+``` bash
 npm run build
 ```
 
-The frontend production build was previously completed successfully. Check the current CI workflow and latest run for the most recent lint/build result.
+Latest recorded result:
 
-### Manual workflow
+``` text
+Build: successful
+Modules transformed: 59
+```
 
-The registration → login → home flow and continued job application flow were tested locally during development.
+An earlier build also succeeded with 58 modules. The later successful
+build contained 59 modules.
 
-Recommended live smoke test:
+This verifies that Vite could compile the frontend into production
+assets at that point in development.
 
-1. Open the deployed frontend.
-2. Register a disposable test job-seeker account.
-3. Log in.
-4. Browse and search jobs.
-5. Submit an application using a test listing.
-6. Check the corresponding data in Django Admin.
-7. Refresh the frontend and verify that persisted data remains available.
+### 5. Admin job-management integration
 
-## ☁️ CI/CD and Deployment
+The admin job-management interface was connected to the backend request
+helper for:
 
-### GitHub Actions
+-   POST --- create a job.
+-   PUT --- update a job.
+-   DELETE --- delete a job.
 
-The repository contains a workflow at `.github/workflows/ci.yml`. The earlier frontend workflow was configured to run lint/build and deploy steps on pushes to `main`, with deployment gated behind successful checks.
+The integration work was completed in the frontend. Each operation
+should also be independently verified against the running backend,
+including database persistence and permission checks, before being
+marked as fully tested.
 
-Because the backend was added later, inspect the current workflow file to confirm whether backend tests and backend deployment are also included. Do not assume that every service is deployed by the same workflow.
+### 6. Application-management interface check
 
-### Frontend — Vercel
+The management interface was exercised with an application record and
+displayed information including:
 
-- Repository: `SHAN2348/job-board-app`
-- Production URL: https://job-board-app-lake-seven.vercel.app/
-- Configure `VITE_API_BASE_URL` to point to the Render backend.
-- Verify the build output and client-side route refresh behavior after deployment.
+-   Applicant information.
+-   Job title.
+-   Company.
+-   Application date.
+-   Current status.
+-   Status choices: Pending, Reviewed, Shortlisted, Rejected.
 
-### Backend — Render
+This confirms that the application-management screen was exercised. It
+does not by itself prove that every status update is successfully
+persisted through the backend API.
 
-- Production URL: https://job-board-backend-thf9.onrender.com/
-- Django REST API is hosted as a Render web service.
-- Configure dependencies, start command, environment variables, allowed hosts, CORS, and database SSL.
-- Apply migrations as part of the deployment process as configured by the service.
+### 7. GitHub Actions verification
 
-### Database — Aiven
+The original frontend workflow was configured to run linting, build, and
+Vercel deployment.
 
-- Production database: Aiven for MySQL.
-- Django connects using private host, port, database, username, password, and SSL configuration.
-- Keep credentials in private environment variables.
-- Apply migrations against the intended database.
+Check the repository's Actions tab for the latest workflow run before
+claiming that a particular commit passed all CI/CD stages.
 
-### Django Admin
+### Testing status summary
 
-Production admin:
+  -----------------------------------------------------------------------
+  Test or activity                    Recorded status
+  ----------------------------------- -----------------------------------
+  Local jobs API retrieval            Passed --- 6 records returned
 
-https://job-board-backend-thf9.onrender.com/admin/
+  Django backend test suite            Passed --- 41 tests
 
-The production superuser was created using Django's `createsuperuser` management command from the local backend environment after verifying that the local Django process was connected to Aiven. This was used because interactive Shell and One-Off Jobs were unavailable on the Render Free compute plan.
+  React production build              Passed during development
 
-## 🔒 Security and Production Considerations
+  Admin POST/PUT/DELETE frontend      Connected; individual backend
+  integration                         verification remains necessary
 
-- Keep Django `DEBUG` disabled in production.
-- Use a strong, unique Django secret key.
-- Restrict `ALLOWED_HOSTS` to trusted backend hostnames.
-- Configure CORS only for trusted frontend origins.
-- Use HTTPS for production traffic.
-- Use the database provider's recommended SSL configuration.
-- Never expose database credentials or JWT secrets in frontend code.
-- Keep passwords hashed using Django's user-creation/authentication APIs.
-- Review object-level permissions for job applications and user-owned records.
-- Back up the production database and document restore steps.
+  Application-management screen       Exercised with an application
+                                      record
 
-## 🔮 Future Improvements
+  Production backend hosting           Deployed on Render
 
-Potential enhancements (not claims about currently implemented features):
+  Production database                 Aiven MySQL
 
-- Recruiter registration and role-based recruiter dashboard.
-- Advanced job filters, pagination, and sorting at the API level.
-- Saved jobs and candidate profiles.
-- Resume upload and application status tracking.
-- Email notifications.
-- More frontend unit and end-to-end tests.
-- Production monitoring, structured logs, and error reporting.
-- Automated deployment smoke tests.
-- Accessibility and performance audits.
+  Full deployed user journeys          Continue regression testing after
+                                      code or configuration changes
+  -----------------------------------------------------------------------
 
-## 📚 Additional Documentation
+### Recommended end-to-end test sequence
 
-- [Architecture](docs/ARCHITECTURE.md)
-- [Setup and Deployment](docs/SETUP_AND_DEPLOYMENT.md)
-- [API Reference](docs/API_REFERENCE.md)
-- [Testing Guide](docs/TESTING.md)
-- [Interview Walkthrough](docs/INTERVIEW_WALKTHROUGH.md)
+Use this checklist when completing the remaining verification:
 
-## 📄 License
+-   [ ] Register a new job-seeker account.
+-   [ ] Verify that invalid registration data is rejected.
+-   [ ] Log in with valid credentials.
+-   [ ] Verify that an authenticated API request succeeds.
+-   [ ] Verify that an unauthenticated protected request is rejected.
+-   [ ] Verify that a job seeker cannot perform recruiter-only
+    operations.
+-   [ ] Log in as a recruiter.
+-   [ ] Create a job and confirm it appears in the database.
+-   [ ] Update the job and confirm the changes persist.
+-   [ ] Delete the job and confirm it is removed.
+-   [ ] Browse, search, and filter the available jobs.
+-   [ ] Submit a job application as a job seeker.
+-   [ ] Confirm that the application is stored.
+-   [ ] Review the application as an authorized recruiter.
+-   [ ] Change the application status and verify that the change
+    persists.
+-   [ ] Test JWT expiration and automatic refresh.
+-   [ ] Run frontend lint and production build.
+-   [ ] Run the backend test suite.
+-   [ ] Verify the deployed frontend and backend together.
 
-The previous README identified this project as MIT licensed. Keep that statement only if the repository's `LICENSE` file is present and contains the MIT License text. See [LICENSE](LICENSE).
+------------------------------------------------------------------------
 
-## 👨‍💻 Author
+## Git, GitHub, CI/CD and deployment
 
-**Shaik Shan Shareef**
+### Version control workflow
 
-- GitHub: [@SHAN2348](https://github.com/SHAN2348)
-- Repository: [job-board-app](https://github.com/SHAN2348/job-board-app)
+Git was used to track development changes and GitHub was used to host
+the project.
+
+A typical update workflow:
+
+``` bash
+git status
+git add .
+git commit -m "Integrate Django API with React frontend"
+git push origin main
+```
+
+### CI/CD workflow
+
+The original frontend CI/CD pipeline uses GitHub Actions.
+
+``` text
+Developer pushes code to GitHub
+              |
+              v
+        GitHub Actions
+              |
+              v
+          ESLint check
+              |
+              v
+        Production build
+              |
+       Checks successful?
+              |
+              v
+       Vercel deployment
+```
+
+The workflow is defined in `.github/workflows/ci.yml`.
+
+### Frontend deployment
+
+The original frontend is hosted on Vercel:
+
+https://job-board-app-lake-seven.vercel.app/
+
+### Backend deployment
+
+The Django backend's local development and integration should not be
+confused with production deployment. A production backend host,
+production MySQL database, environment secrets, allowed hosts, CORS
+settings, and frontend API URL must all be configured before the
+full-stack deployment is complete.
+
+------------------------------------------------------------------------
+
+## Troubleshooting notes
+
+### Frontend does not start
+
+Check that dependencies are installed:
+
+``` bash
+npm install
+npm run dev
+```
+
+### Backend cannot connect to MySQL
+
+Check:
+
+-   MySQL Server is running.
+-   The database exists.
+-   Django's database name, username, password, host, and port are
+    correct.
+-   The configured MySQL driver is installed.
+
+### Frontend cannot access the API
+
+Check:
+
+-   Django is running.
+-   The frontend API base URL is correct.
+-   The API endpoint is correct.
+-   CORS permits the frontend origin.
+-   The browser developer console and network tab for the actual
+    response.
+
+### Protected API returns an authentication error
+
+Check:
+
+-   The user is logged in.
+-   The frontend sends the expected authorization header.
+-   The token is valid and has not expired.
+-   The user has the required role and permission.
+
+### Database changes are not visible
+
+Check that:
+
+-   The correct MySQL database is configured.
+-   Migrations have been applied.
+-   The API request completed successfully.
+-   The frontend is displaying the latest API response rather than stale
+    local data.
+
+------------------------------------------------------------------------
+
+## Current status and next steps
+
+The application is deployed as a React frontend on Vercel and a Django
+REST backend on Render, connected to Aiven MySQL. The backend test suite
+was run successfully with **41 tests passing**. The frontend production
+build was also verified successfully during development.
+
+Further improvements can include broader end-to-end browser testing,
+additional monitoring and logging, and expanding automated CI checks to
+cover the backend as well as the frontend.
+
+------------------------------------------------------------------------
+
+## Learning outcomes
+
+This project demonstrates practical experience with:
+
+-   Building a React application using reusable components.
+-   Managing frontend navigation with React Router.
+-   Working with JavaScript state and form interactions.
+-   Building backend applications with Python and Django.
+-   Developing REST APIs using Django REST Framework.
+-   Connecting a React frontend to a Python backend.
+-   Using MySQL with Django ORM.
+-   Implementing JWT authentication.
+-   Understanding role-based authorization.
+-   Performing CRUD operations.
+-   Validating API responses and debugging integration issues.
+-   Using Git and GitHub for version control.
+-   Building frontend assets with Vite.
+-   Automating frontend checks and deployment through GitHub Actions.
+
+## License
+
+This project is distributed under the MIT License. See the `LICENSE`
+file in the repository for details.
