@@ -96,11 +96,14 @@ DATABASES = {
         'OPTIONS': {
             'charset': 'utf8mb4',
             'ssl': {
-                'ca': str(BASE_DIR / 'ca.pem'),
-            },
-        },
-    }
-}
+                    'ca': os.getenv(
+                        'DB_SSL_CA_PATH',
+                        str(BASE_DIR / 'ca.pem')
+                    ),
+                },
+                        },
+                    }
+                }
 
 
 # Password validation
