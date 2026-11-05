@@ -7,6 +7,7 @@ import JobDetailsPage from './pages/JobDetailsPage/JobDetailsPage';
 import AdminPage from './pages/AdminPage/AdminPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import LoginPage from './pages/LoginPage/LoginPage';
+import RegisterPage from './pages/RegisterPage/RegisterPage';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import MyApplicationsPage from './pages/MyApplicationsPage/MyApplicationsPage';
 import ManageApplicationsPage from './pages/ManageApplicationsPage/ManageApplicationsPage';
@@ -23,6 +24,7 @@ function App() {
           <Route path="/jobs" element={<JobListingPage />} />
           <Route path="/jobs/:id" element={<JobDetailsPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route
                 path="/my-applications"
                 element={

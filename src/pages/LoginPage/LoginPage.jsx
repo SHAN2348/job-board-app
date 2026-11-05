@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth';
 import { API_BASE_URL } from '../../utils/api';
 import './LoginPage.css';
@@ -12,6 +12,8 @@ function LoginPage() {
 
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const registrationSuccess = location.state?.registrationSuccess;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -113,6 +115,11 @@ function LoginPage() {
                 Enter your credentials to access your JobBoard account.
               </p>
             </div>
+            {registrationSuccess && (
+                <div className="login-success" role="status">
+                  {registrationSuccess}
+                </div>
+              )}
 
             <form onSubmit={handleSubmit}>
               <div className="login-field">
@@ -166,6 +173,10 @@ function LoginPage() {
                 )}
               </button>
             </form>
+
+            <p className="login-register-link">
+                Don't have an account? <Link to="/register">Create an account</Link>
+              </p>
 
             <div className="login-security-note">
               <span aria-hidden="true">✦</span>
