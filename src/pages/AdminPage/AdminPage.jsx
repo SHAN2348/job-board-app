@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import JobForm from '../../components/JobForm/JobForm';
-import { apiRequest } from '../../utils/api';
+import { apiRequest, API_BASE_URL } from '../../utils/api';
 import { useJobs } from '../../context/useJobs';
 import { mapJobToAPI, mapJobFromAPI } from '../../utils/jobMapper';
 import './AdminPage.css';
@@ -41,7 +41,7 @@ function AdminPage() {
     try {
       if (editingJob) {
         const response = await apiRequest(
-          `http://127.0.0.1:8000/api/jobs/${editingJob.id}/`,
+          `${API_BASE_URL}/api/jobs/${editingJob.id}/`,
           {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -70,7 +70,7 @@ function AdminPage() {
       }
 
       const response = await apiRequest(
-        'http://127.0.0.1:8000/api/jobs/',
+        `${API_BASE_URL}/api/jobs/`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -101,7 +101,7 @@ function AdminPage() {
   const confirmDelete = async () => {
     try {
       const response = await apiRequest(
-        `http://127.0.0.1:8000/api/jobs/${confirmDeleteId}/`,
+        `${API_BASE_URL}/api/jobs/${confirmDeleteId}/`,
         { method: 'DELETE' }
       );
 

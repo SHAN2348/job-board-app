@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth';
+import { API_BASE_URL } from '../../utils/api';
 import './LoginPage.css';
 
 function LoginPage() {
@@ -19,7 +20,7 @@ function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/token/', {
+      const response = await fetch(`${API_BASE_URL}/api/token/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,7 +34,7 @@ function LoginPage() {
         throw new Error(data.detail || 'Login failed. Check your credentials.');
       }
 
-      const userResponse = await fetch('http://127.0.0.1:8000/api/me/', {
+      const userResponse = await fetch(`${API_BASE_URL}/api/me/`, {
         headers: {
           Authorization: `Bearer ${data.access}`,
         },

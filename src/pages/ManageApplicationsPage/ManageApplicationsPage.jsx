@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { apiRequest } from '../../utils/api';
+import { apiRequest, API_BASE_URL } from '../../utils/api';
 import './ManageApplicationsPage.css';
 
 const STATUS_OPTIONS = [
@@ -25,7 +25,7 @@ function ManageApplicationsPage() {
         setError('');
 
         const response = await apiRequest(
-          'http://127.0.0.1:8000/api/applications/'
+          `${API_BASE_URL}/api/applications/`
         );
 
         const data = await response.json();
@@ -63,7 +63,7 @@ function ManageApplicationsPage() {
       setError('');
 
       const response = await apiRequest(
-        `http://127.0.0.1:8000/api/applications/${applicationId}/status/`,
+        `${API_BASE_URL}/api/applications/${applicationId}/status/`,
         {
           method: 'PATCH',
           headers: {

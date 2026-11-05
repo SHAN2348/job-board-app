@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useJobs } from '../../context/useJobs';
 import { useAuth } from '../../context/useAuth';
-import { apiRequest } from '../../utils/api';
+import { apiRequest, API_BASE_URL } from '../../utils/api';
 import './JobDetailsPage.css';
 
 function JobDetailsPage() {
@@ -44,7 +44,7 @@ function JobDetailsPage() {
       setApplying(true);
 
       const response = await apiRequest(
-        'http://127.0.0.1:8000/api/applications/',
+        `${API_BASE_URL}/api/applications/`,
         {
           method: 'POST',
           headers: {

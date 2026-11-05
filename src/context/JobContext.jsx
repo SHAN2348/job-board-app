@@ -2,6 +2,7 @@
 import { mapJobFromAPI } from '../utils/jobMapper';
 import { useEffect, useState } from 'react';
 import { JobContext } from './JobContext';
+import { API_BASE_URL } from '../utils/api';
 
 export function JobProvider({ children }) {
   const [jobs, setJobs] = useState([]);
@@ -14,7 +15,7 @@ export function JobProvider({ children }) {
         setLoading(true);
         setError(null);
 
-        let nextUrl = 'http://127.0.0.1:8000/api/jobs/';
+        let nextUrl = `${API_BASE_URL}/api/jobs/`;
         let allJobs = [];
 
         while (nextUrl) {

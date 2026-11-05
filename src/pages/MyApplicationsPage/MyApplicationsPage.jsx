@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useJobs } from '../../context/useJobs';
-import { apiRequest } from '../../utils/api';
+import { apiRequest, API_BASE_URL } from '../../utils/api';
 import './MyApplicationsPage.css';
 
 function MyApplicationsPage() {
@@ -21,7 +21,7 @@ function MyApplicationsPage() {
         setError('');
 
         const response = await apiRequest(
-          'http://127.0.0.1:8000/api/applications/'
+          `${API_BASE_URL}/api/applications/`
         );
 
         const data = await response.json();
